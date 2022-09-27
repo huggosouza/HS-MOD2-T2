@@ -33,7 +33,6 @@ class Dinosaur:
             self.dino_run = True
             
         if user_input[pygame.K_DOWN]:
-            self.dino_jump = False
             self.dino_run = False
             self.dino_duck = True
             
