@@ -141,7 +141,8 @@ class Game:
                     # Feed it with events every frame
                     textinput.update(events)
                     # Blit its surface onto the screen
-                    self.screen.blit(textinput.surface, (10, 10))
+                    self.screen.blit(textinput.surface, (20, 30))
+                    self.print_text("Type your nickname", [HALF_S_WIDTH, HALF_S_HEIGHT], "#FF0000")
 
                     for event in events:
                         if event.type == pygame.QUIT:
