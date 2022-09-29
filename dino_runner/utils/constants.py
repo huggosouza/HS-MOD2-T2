@@ -61,7 +61,7 @@ BIRD = [
     pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird2.png")),
 ]
 
-
+# Finding and listing fonts
 current_DR = os.path.abspath("dino_runner")
 fonts_dir = current_DR + "/assets/fonts/"
 FONTS = {}
@@ -69,7 +69,7 @@ FONTS = {}
 for i in os.listdir(fonts_dir):
     i = i.split(".")
     if i[1] == "ttf":
-        print(f"Encontrada fonte {i[0] + '.' + i[1]}")
+        print(f"Fonte encontrada: {i[0] + '.' + i[1]}")
         FONTS.update({i[0].upper() : fonts_dir + i[0] + '.' + i[1]})
         
 print("Fontes encontradas: ", FONTS.values())
