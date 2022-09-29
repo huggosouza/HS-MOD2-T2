@@ -1,7 +1,7 @@
 import pygame_textinput
 import pygame
 from dino_runner.components.dinosaur import Dinosaur
-from dino_runner.utils.constants import BG, FONTS, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
+from dino_runner.utils.constants import BG, FONTS, GAMEOVER, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 
 FREE_SANS_BOLD_PATH = FONTS.get("FREESANSBOLD")
@@ -158,6 +158,7 @@ class Game:
             self.handle_events_on_menu()
                 
         else:
+            self.screen.blit(GAMEOVER, (HALF_S_WIDTH - 55, HALF_S_HEIGHT - 200))
             self.screen.blit(ICON, (HALF_S_WIDTH, HALF_S_HEIGHT))
             # Added player name to the bottom of the screen
             self.print_text(f"Player name: {self.player_name}", [HALF_S_WIDTH, SCREEN_HEIGHT - 25], (0, 0, 0))
@@ -168,7 +169,7 @@ class Game:
             self.print_text(f"Final score: {self.score}", [HALF_S_WIDTH, HALF_S_HEIGHT - 110], "#000000")
             # Stores the round score and shows the best score from the list
             self.best_score.append(self.score)
-            self.print_text(f"Best score: {max(self.best_score)}", [HALF_S_WIDTH, HALF_S_HEIGHT - 85], (0, 255, 0))
+            self.print_text(f"Best score: {max(self.best_score)}", [HALF_S_WIDTH, HALF_S_HEIGHT - 80], (0, 255, 0))
             self.print_text("You died, press any key to try again...", [HALF_S_WIDTH, HALF_S_HEIGHT - 50], "#000000")
             # Resets game_speed everytime player dies.
             self.game_speed = 10
