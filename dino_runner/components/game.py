@@ -64,7 +64,7 @@ class Game:
     def update_score(self):
         self.score += 1
         if self.score % 100 == 0:
-            self.game_speed += 5
+            self.game_speed += 2
         
         font = pygame.font.Font(FONT_STYLE, 22)
         # Score color change depending on the current score and now the player name appears at the bottom of the screen
