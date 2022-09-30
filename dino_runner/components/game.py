@@ -4,9 +4,8 @@ from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.utils.constants import BG, FONTS, GAMEOVER, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
-
-FREE_SANS_BOLD_PATH = FONTS.get("FREESANSBOLD")
-FONT_STYLE = FREE_SANS_BOLD_PATH
+ 
+FONT_STYLE = FONTS.get("FREESANSBOLD")
 HALF_S_HEIGHT = SCREEN_HEIGHT / 2
 HALF_S_WIDTH = 420
 

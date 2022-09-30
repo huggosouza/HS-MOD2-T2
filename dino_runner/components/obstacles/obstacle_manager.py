@@ -5,7 +5,6 @@ from dino_runner.components.obstacles.cactus import Cactus
 from dino_runner.components.obstacles.largecactus import LargeCactus
 from dino_runner.utils.constants import BIRD, SMALL_CACTUS
 from dino_runner.utils.constants import LARGE_CACTUS
-from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 
 
 class ObstacleManager:
@@ -31,9 +30,12 @@ class ObstacleManager:
                     game.playing = False
                     game.death_count += 1
                     break
-                else:
+                elif game.player.shield:
+                    pass
+                elif game.player.hammer:
                     self.obstacles.remove(obstacle)
-            
+    
+    
     def draw(self, screen):
         for obstacle in self.obstacles:
             obstacle.draw(screen)
