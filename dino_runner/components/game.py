@@ -1,8 +1,9 @@
 import pygame_textinput
 import pygame
 from dino_runner.components.dinosaur import Dinosaur
-from dino_runner.utils.constants import BG, FONTS, GAMEOVER, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
+from dino_runner.utils.constants import BG, FONTS, GAMEOVER, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 
 FREE_SANS_BOLD_PATH = FONTS.get("FREESANSBOLD")
 FONT_STYLE = FREE_SANS_BOLD_PATH
@@ -28,6 +29,7 @@ class Game:
         self.y_pos_bg = 380
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
+        self.power_up_manager = PowerUpManager()
 
 
     def execute(self):
@@ -35,6 +37,8 @@ class Game:
         while self.running:
             if not self.playing:
                 self.show_menu()
+            
+            self.power_up_manager.update(self.score, self.game_speed, self.player)
                 
         pygame.display.quit()
         pygame.quit()
@@ -43,6 +47,7 @@ class Game:
         # Game loop: events - update - draw
         self.playing = True
         self.score = 0
+        self.power_up_manager.reset_power_ups()
         self.obstacle_manager.reset_obstacles()
         while self.playing:
             self.events()
@@ -59,6 +64,7 @@ class Game:
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
         self.obstacle_manager.update(self)
+        self.power_up_manager.update(self.score, self.game_speed, self.player)
         
     
     def update_score(self):
@@ -88,7 +94,16 @@ class Game:
             self.print_text(f"Player name: {self.player_name}", [HALF_S_WIDTH, SCREEN_HEIGHT - 25], (0, 0, 0))
         
         
-
+    def draw_power_up_time(self):
+        if self.player.has_power_up:
+            time_to_show = round((self.player.power_up_time - pygame.time.get_ticks()) / 1000, 2)
+            if time_to_show >= 0:
+                self.print_text(f"{self.player.type.capitalize()} enabled for {time_to_show} seconds.", [500, 30], "#FF0000")
+            else:
+                self.player.has_power_up = False
+                self.player.type = DEFAULT_TYPE
+                
+                
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
@@ -96,6 +111,8 @@ class Game:
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
         self.update_score()
+        self.draw_power_up_time()
+        self.power_up_manager.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
 
