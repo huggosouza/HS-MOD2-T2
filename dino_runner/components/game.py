@@ -1,11 +1,12 @@
 import pygame_textinput
 import pygame
 from dino_runner.components.dinosaur import Dinosaur
-from dino_runner.utils.constants import BG, FONTS, GAMEOVER, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from dino_runner.utils.constants import BG, FONTS, GAMEOVER, HEART, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
  
-FONT_STYLE = FONTS.get("FREESANSBOLD")
+FREESANSFONT = FONTS.get("FREESANSBOLD")
+MAXDRIVE = FONTS.get("MAXDRIVE")
 HALF_S_HEIGHT = SCREEN_HEIGHT / 2
 HALF_S_WIDTH = 420
 
@@ -70,26 +71,23 @@ class Game:
         self.score += 1
         if self.score % 100 == 0:
             self.game_speed += 2
+            
+        counter = 180    
+        for i in range(0, self.player.hearts):
+            self.screen.blit(HEART, (counter - 50, 25))
+            counter = counter - 30
+            
+            
         
-        font = pygame.font.Font(FONT_STYLE, 22)
         # Score color change depending on the current score and now the player name appears at the bottom of the screen
         if self.score < 350:
-            text = font.render(f"Score: {self.score}", True, (255, 0, 0))
-            text_rect = text.get_rect()
-            text_rect.center = (1000, 50)
-            self.screen.blit(text, text_rect)
+            self.print_text(f"Score: {self.score}", [925, 25], (255, 0, 0), MAXDRIVE, 22)
             self.print_text(f"Player name: {self.player_name}", [HALF_S_WIDTH, SCREEN_HEIGHT - 25], (0, 0, 0))
         elif self.score > 350:
-            text = font.render(f"Score: {self.score}", True, (0, 0, 255))
-            text_rect = text.get_rect()
-            text_rect.center = (1000, 50)
-            self.screen.blit(text, text_rect)
+            self.print_text(f"Score: {self.score}", [925, 25], (255, 0, 0), MAXDRIVE, 22)
             self.print_text(f"Player name: {self.player_name}", [HALF_S_WIDTH, SCREEN_HEIGHT - 25], (0, 0, 0))
         if self.score > 875:
-            text = font.render(f"Score: {self.score}", True, (0, 255, 0))
-            text_rect = text.get_rect()
-            text_rect.center = (1000, 50)
-            self.screen.blit(text, text_rect)
+            self.print_text(f"Score: {self.score}", [925, 25], (255, 0, 0), MAXDRIVE, 22)
             self.print_text(f"Player name: {self.player_name}", [HALF_S_WIDTH, SCREEN_HEIGHT - 25], (0, 0, 0))
         
         
@@ -134,8 +132,8 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 self.run()
 
-    def print_text(self, urText, pos, color):
-        font = pygame.font.Font(FONT_STYLE, 22)
+    def print_text(self, urText, pos, color, font_style = FREESANSFONT, font_size = 22):
+        font = pygame.font.Font(font_style, font_size)
         text = font.render(f"{urText}", True, color)
         text_rect = text.get_rect()
         text_rect.center = (pos[0], pos[1])
@@ -175,18 +173,18 @@ class Game:
                 
         else:
             self.screen.blit(GAMEOVER, (HALF_S_WIDTH - 55, HALF_S_HEIGHT - 200))
-            self.screen.blit(ICON, (HALF_S_WIDTH, HALF_S_HEIGHT))
             # Added player name to the bottom of the screen
             self.print_text(f"Player name: {self.player_name}", [HALF_S_WIDTH, SCREEN_HEIGHT - 25], (0, 0, 0))
             # Added death counter to try again menu
-            self.print_text(f"Deaths: ", [HALF_S_WIDTH, HALF_S_HEIGHT - 135], (0, 0, 0))
-            self.print_text(f"{self.death_count}", [HALF_S_WIDTH + 85, HALF_S_HEIGHT - 134], (255, 0, 0))
+            self.print_text(f"Deaths: {self.death_count}", [HALF_S_WIDTH, HALF_S_HEIGHT - 135], (0, 0, 0))
             # Final score of the round
             self.print_text(f"Final score: {self.score}", [HALF_S_WIDTH, HALF_S_HEIGHT - 110], "#000000")
             # Stores the round score and shows the best score from the list
             self.best_score.append(self.score)
             self.print_text(f"Best score: {max(self.best_score)}", [HALF_S_WIDTH, HALF_S_HEIGHT - 80], (0, 255, 0))
             self.print_text("You died, press any key to try again...", [HALF_S_WIDTH, HALF_S_HEIGHT - 50], "#000000")
+            # Dinosaur icon
+            self.screen.blit(ICON, (HALF_S_WIDTH, HALF_S_HEIGHT))
             # Resets game_speed everytime player dies.
             self.game_speed = 10
             self.handle_events_on_menu()
